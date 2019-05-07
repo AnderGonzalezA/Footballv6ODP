@@ -52,7 +52,7 @@ public class Conn {
 		pst.executeUpdate();
 	}
 
-	public void updatePlayer(FootballPlayer player,String old_name) throws SQLException {
+	public void updatePlayer(String old_name,FootballPlayer player) throws SQLException {
 		String name = player.getPlayerName();
 		int age = player.getAge();
 		String team_name = player.getTeamName();
@@ -112,6 +112,9 @@ public class Conn {
 	}
 
 	public void insertTeam(Team team) throws SQLException {
+		String name = team.getTeamName();
+		String coach = team.getCoach();
+		
 		PreparedStatement pst = this.conn.prepareStatement("insert into teams values(?,?);");
 
 		pst.setString(1, name);
@@ -130,15 +133,46 @@ public class Conn {
 		pst.executeUpdate();
 	}
 
+	public void updateTeam(String old_name,Team team) throws SQLException {
+		String name = team.getTeamName();
+		String coach = team.getCoach();
+		
+		PreparedStatement pst = this.conn.prepareStatement("update teams set team_name=?,coach=? where team_name=?;");
+
+		pst.setString(1, name);
+		pst.setString(2, coach);
+		pst.setString(3, old_name);
+
+		pst.executeUpdate();
+	}
+
 	public ResultSet selectAllTeams() throws SQLException {
 		PreparedStatement pst = this.conn.prepareStatement("select * from teams;");
 		return pst.executeQuery();
+	}
+
+	public ArrayList<Team> selectAllTeams2() throws SQLException {
+		ArrayList<Team> teams = new ArrayList<Team>();
+		PreparedStatement pst = this.conn.prepareStatement("select * from teams;");
+		ResultSet result = pst.executeQuery();
+		while (result.next()) {
+			Team team = new Team(result.getString(1),result.getString(2));
+			teams.add(team);
+		}
+		return teams;
 	}
 
 	public ResultSet selectTeam(String old_name) throws SQLException {
 		PreparedStatement pst = this.conn.prepareStatement("select * from teams where team_name=?;");
 		pst.setString(1, old_name);
 		return pst.executeQuery();
+	}
+
+	public Team selectTeam2(String old_name) throws SQLException {
+		PreparedStatement pst = this.conn.prepareStatement("select * from teams where team_name=?;");
+		pst.setString(1, old_name);
+		ResultSet player = pst.executeQuery();
+		return new Team(player.getString(1),player.getString(2));
 	}
 
 	public void deleteTeam(String name) throws SQLException {

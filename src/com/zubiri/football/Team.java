@@ -3,6 +3,11 @@ public class Team {
 
 	private String teamName;
 	private String coach;
+	
+	public Team(String name,String coach) {
+		this.setTeamName(name);
+		this.setCoach(coach);
+	}
 
 	public String getTeamName() {
 		return this.teamName;
