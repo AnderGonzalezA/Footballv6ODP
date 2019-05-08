@@ -10,7 +10,7 @@
 
 	String text = "";
 	if (request.getParameter("update") != null) {
-		ResultSet team = conn.selectTeam("old_name");
+		ResultSet team = conn.selectTeam(request.getParameter("old_name"));
 		try {
 			if (team.next()) {
 				text = "<title>Update a team</title></head><body><h1>Update a team</h1><form action='teams.jsp' method='POST'>"
