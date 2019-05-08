@@ -27,7 +27,7 @@
 		}
 	}
 	if (request.getParameter("delete") != null) {
-		conn.deleteTeam("old_name");
+		conn.deleteTeam(request.getParameter("old_name"));
 		String site = new String("teams.jsp");
 		response.setStatus(response.SC_MOVED_TEMPORARILY);
 		response.setHeader("Location", site);

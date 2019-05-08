@@ -182,7 +182,7 @@ public class Conn {
 	}
 
 	public int getMaxID() throws SQLException {
-		PreparedStatement pst = conn.prepareStatement("select max(id) from matches;");
+		PreparedStatement pst = this.conn.prepareStatement("select max(id) from matches;");
 		ResultSet result = pst.executeQuery();
 		return result.getInt(1);
 	}

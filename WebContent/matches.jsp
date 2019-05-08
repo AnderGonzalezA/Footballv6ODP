@@ -14,9 +14,9 @@
 			Conn conn = new Conn();
 
 			if (request.getParameter("update") != null) {
-				conn.updateMatch(request.getParameter("local_team"),
+				conn.updateMatch(Integer.parseInt(request.getParameter("id")), request.getParameter("local_team"),
 						Integer.parseInt(request.getParameter("local_goals")), request.getParameter("visitor_team"),
-						Integer.parseInt(request.getParameter("visitor_goals")), request.getParameter("id"));
+						Integer.parseInt(request.getParameter("visitor_goals")));
 			}
 
 			if (request.getParameter("insert") != null) {
