@@ -184,7 +184,11 @@ public class Conn {
 	public int getMaxID() throws SQLException {
 		PreparedStatement pst = this.conn.prepareStatement("select max(id) from matches;");
 		ResultSet result = pst.executeQuery();
-		return result.getInt(1);
+		if (result.next()) {
+			return result.getInt(1);
+		}else {
+			return 0;
+		}
 	}
 
 	public void insertMatch(String local_team, int local_goals, String visitor_team, int visitor_goals)
