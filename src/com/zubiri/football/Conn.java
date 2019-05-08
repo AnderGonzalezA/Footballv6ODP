@@ -200,7 +200,25 @@ public class Conn {
 		pst.executeUpdate();
 	}
 
-	public void updateMatch(String local_team, int local_goals, String visitor_team, int visitor_goals)
+	public void insertMatch(FootballMatch footballMatch)
+			throws SQLException {
+		String local_team = footballMatch.getLocalTeam().getTeamName();
+		int local_goals = footballMatch.getGoalsLocal();
+		String visitor_team = footballMatch.getVisitorTeam().getTeamName();
+		int visitor_goals = footballMatch.getGoalsVisitor();
+		
+		PreparedStatement pst = this.conn.prepareStatement("insert into matches values(?,?,?,?,?);");
+
+		pst.setInt(1, this.getMaxID() + 1);
+		pst.setString(2, local_team);
+		pst.setInt(3, local_goals);
+		pst.setString(4, visitor_team);
+		pst.setInt(5, visitor_goals);
+
+		pst.executeUpdate();
+	}
+
+	public void updateMatch(int id,String local_team, int local_goals, String visitor_team, int visitor_goals)
 			throws SQLException {
 		PreparedStatement pst = this.conn.prepareStatement(
 				"update matches set local_team=?,local_goals=?,visitor_team=?,visitor_goals=? where id=?;");
@@ -209,7 +227,26 @@ public class Conn {
 		pst.setInt(2, local_goals);
 		pst.setString(3, visitor_team);
 		pst.setInt(4, visitor_goals);
-		pst.setInt(5, this.getMaxID() + 1);
+		pst.setInt(5, id);
+
+		pst.executeUpdate();
+	}
+
+	public void updateMatch(int id,FootballMatch footballMatch)
+			throws SQLException {
+		String local_team = footballMatch.getLocalTeam().getTeamName();
+		int local_goals = footballMatch.getGoalsLocal();
+		String visitor_team = footballMatch.getVisitorTeam().getTeamName();
+		int visitor_goals = footballMatch.getGoalsVisitor();
+		
+		PreparedStatement pst = this.conn.prepareStatement(
+				"update matches set local_team=?,local_goals=?,visitor_team=?,visitor_goals=? where id=?;");
+
+		pst.setString(1, local_team);
+		pst.setInt(2, local_goals);
+		pst.setString(3, visitor_team);
+		pst.setInt(4, visitor_goals);
+		pst.setInt(5, id);
 
 		pst.executeUpdate();
 	}
@@ -219,10 +256,28 @@ public class Conn {
 		return pst.executeQuery();
 	}
 
+	public ArrayList<FootballMatch> selectAllMatches2() throws SQLException {
+		ArrayList<FootballMatch> footballMatches = new ArrayList<FootballMatch>();
+		PreparedStatement pst = this.conn.prepareStatement("select local_team,local_goals,visitor_team,visitor_goals from matches;");
+		ResultSet result = pst.executeQuery();
+		while (result.next()) {
+			FootballMatch footballMatch = new FootballMatch(new Team(result.getString(1)),result.getInt(2),new Team(result.getString(3)),result.getInt(4));
+			footballMatches.add(footballMatch);
+		}
+		return footballMatches;
+	}
+
 	public ResultSet selectMatch(int id) throws SQLException {
 		PreparedStatement pst = this.conn.prepareStatement("select * from matches where id=?;");
 		pst.setInt(1, id);
 		return pst.executeQuery();
+	}
+
+	public FootballMatch selectMatch2(int id) throws SQLException {
+		PreparedStatement pst = this.conn.prepareStatement("select * from matches where id=?;");
+		pst.setInt(1, id);
+		ResultSet footballMatch = pst.executeQuery();
+		return new FootballMatch(new Team(footballMatch.getString(1)),footballMatch.getInt(2),new Team(footballMatch.getString(3)),footballMatch.getInt(4));
 	}
 
 	public void deleteMatch(int id) throws SQLException {

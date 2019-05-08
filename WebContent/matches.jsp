@@ -16,7 +16,7 @@
 			if (request.getParameter("update") != null) {
 				conn.updateMatch(request.getParameter("local_team"),
 						Integer.parseInt(request.getParameter("local_goals")), request.getParameter("visitor_team"),
-						Integer.parseInt(request.getParameter("visitor_goals")));
+						Integer.parseInt(request.getParameter("visitor_goals")), request.getParameter("id"));
 			}
 
 			if (request.getParameter("insert") != null) {

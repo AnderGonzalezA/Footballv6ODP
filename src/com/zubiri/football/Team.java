@@ -8,6 +8,10 @@ public class Team {
 		this.setTeamName(name);
 		this.setCoach(coach);
 	}
+	
+	public Team(String name) {
+		this.setTeamName(name);
+	}
 
 	public String getTeamName() {
 		return this.teamName;

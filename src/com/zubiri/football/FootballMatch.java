@@ -5,6 +5,13 @@ public class FootballMatch {
 	private Team visitorTeam;
 	private int goalsLocal;
 	private int goalsVisitor;
+	
+	public FootballMatch(Team local_team,int local_goals,Team visitor_team,int visitor_goals) {
+		this.setLocalTeam(localTeam);
+		this.setGoalsLocal(goalsLocal);
+		this.setVisitorTeam(visitor_team);
+		this.setGoalsVisitor(visitor_goals);
+	}
 
 	public Team getLocalTeam() {
 		return this.localTeam;
