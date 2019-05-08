@@ -10,28 +10,20 @@
 
 	String text = "";
 	if (request.getParameter("update") != null) {
-		try {
-			ResultSet player = conn.selectPlayer(request.getParameter("old_name"));
-			if (player.next()) {
-				text = "<title>Update a player</title></head><body><h1>Update a player</h1><form action='players.jsp' method='POST'>"
-						+ "<input type='hidden' value='" + player.getString(1) + "' name='old_name'>"
-						+ "<label>Name</label>&nbsp;&nbsp;<input type='text' value='" + player.getString(1)
-						+ "' name='new_name'><br>" + "<label>Age</label>&nbsp;&nbsp;<input type='text' value='"
-						+ player.getString(2) + "' name='age'><br>"
-						+ "<label>Team name</label>&nbsp;&nbsp;<input type='text' value='" + player.getString(3)
-						+ "' name='team_name'><br>" + "<input type='submit' value='Update' name='update'>"
-						+ "</form>";
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		FootballPlayer player = conn.selectPlayer(request.getParameter("old_name"));
+		text = "<title>Update a player</title></head><body><h1>Update a player</h1><form action='players.jsp' method='POST'>"
+				+ "<input type='hidden' value='" + player.getPlayerName() + "' name='old_name'>"
+				+ "<label>Name</label>&nbsp;&nbsp;<input type='text' value='" + player.getPlayerName()
+				+ "' name='new_name'><br>" + "<label>Age</label>&nbsp;&nbsp;<input type='text' value='"
+				+ player.getAge() + "' name='age'><br>"
+				+ "<label>Team name</label>&nbsp;&nbsp;<input type='text' value='" + player.getTeamName()
+				+ "' name='team_name'><br>" + "<input type='submit' value='Update' name='update'>" + "</form>";
 	}
 	if (request.getParameter("delete") != null) {
 		conn.deletePlayer(request.getParameter("old_name"));
-		String site = new String("players.jsp");
-		response.setStatus(response.SC_MOVED_TEMPORARILY);
-		response.setHeader("Location", site);
+		//response.setStatus(response.SC_MOVED_TEMPORARILY);
+		//response.setHeader("Location", "players.jsp");
+		response.sendRedirect("players.jsp");
 	}
 	if (request.getParameter("insert") != null) {
 		text = "<title>Insert a player</title></head><body><h1>Insert a player</h1><form action='players.jsp' method='POST'>"

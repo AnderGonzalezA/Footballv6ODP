@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"
-	import="java.sql.Connection,java.sql.DriverManager,java.sql.PreparedStatement,java.sql.ResultSet,java.sql.SQLException,com.zubiri.football.*"%>
+	import="java.sql.Connection,java.sql.DriverManager,java.sql.PreparedStatement,java.sql.ResultSet,java.sql.SQLException,com.zubiri.football.*,java.util.ArrayList"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,29 +14,30 @@
 			Conn conn = new Conn();
 
 			if (request.getParameter("update") != null) {
-				conn.updateMatch(Integer.parseInt(request.getParameter("id")), request.getParameter("local_team"),
+				conn.updateMatch(Integer.parseInt(request.getParameter("id")),new FootballMatch(request.getParameter("local_team"),
 						Integer.parseInt(request.getParameter("local_goals")), request.getParameter("visitor_team"),
-						Integer.parseInt(request.getParameter("visitor_goals")));
+						Integer.parseInt(request.getParameter("visitor_goals"))));
 			}
 
 			if (request.getParameter("insert") != null) {
-				conn.insertMatch(request.getParameter("local_team"),
+				conn.insertMatch(new FootballMatch(request.getParameter("local_team"),
 						Integer.parseInt(request.getParameter("local_goals")), request.getParameter("visitor_team"),
-						Integer.parseInt(request.getParameter("visitor_goals")));
+						Integer.parseInt(request.getParameter("visitor_goals"))));
 			}
 
-			ResultSet result = conn.selectAllMatches();
-			String matches = "";
-			while (result.next()) {
-				matches = matches + "<form action='manageMatch.jsp' method='POST'>" + result.getString(2)
-						+ "&nbsp;&nbsp;" + result.getInt(3) + "&nbsp;&nbsp;" + result.getString(4) + "&nbsp;&nbsp;"
-						+ result.getInt(5) + "&nbsp;&nbsp;"
+			ArrayList<FootballMatch> footballMatches = conn.selectAllMatches2();
+			String footballMatchesList = "";
+			for (int i=0;i<footballMatches.size();i++) {
+				int id = footballMatches.indexOf(footballMatches.get(i))+1;
+				footballMatchesList = footballMatchesList + "<form action='manageMatch.jsp' method='POST'>" + footballMatches.get(i).getLocalTeam().getTeamName()
+						+ "&nbsp;&nbsp;" + footballMatches.get(i).getGoalsLocal() + "&nbsp;&nbsp;" + footballMatches.get(i).getVisitorTeam() + "&nbsp;&nbsp;"
+						+ footballMatches.get(i).getGoalsVisitor() + "&nbsp;&nbsp;"
 						+ "<input type='submit' value='Update' name='update'><input type='submit' value='Delete' name='delete'><input type='hidden' name='id' value='"
-						+ result.getInt(1) + "'>" + "</form>" + "<br>";
+						+ id + "'>" + "</form>" + "<br>";
 			}
 		%>
 	</p>
-	<p><%=matches%></p>
+	<p><%=footballMatchesList%></p>
 	<form action='manageMatch.jsp' method='POST'>
 		<input type='submit' value='Insert a match' name='insert'>
 	</form>
